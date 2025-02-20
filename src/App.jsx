@@ -8,10 +8,10 @@ import GlobalStyle from './styles/globalStyle';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 
-function PrivateRoute({ children }) {
-  const user = JSON.parse(localStorage.getItem("usuario"));
+const PrivateRoute = ({ children }) => {
+  const user = localStorage.getItem('usuario');
   return user ? children : <Navigate to="/" />;
-}
+};
 
 function App() {
   return (
@@ -19,10 +19,10 @@ function App() {
       <GlobalStyle />
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/criarConta" element={<CriarConta />} />
         <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/transferencia" element={<PrivateRoute><Transferencia /></PrivateRoute>} />
         <Route path="/transacoes" element={<PrivateRoute><Transacoes /></PrivateRoute>} />
-        <Route path="/criarConta" element={<CriarConta />} />
       </Routes>
     </ThemeProvider>
   );
