@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../../api/api ';
-import Navbar from '../../components/navbar/navBar';
-import { Container, DetalhesConta, Section, TabelaTransacoes, StatusBadge } from './homeStyles';
-import Footer from '../../components/footer/footer';
+import api from '../../../../api/api ';
+import Navbar from '../../../components/navbar/navBar';
+import Footer from '../../../components/footer/footer';
+import { Container, Section, TabelaTransacoes, DetalhesConta, InfoConta, StatusBadge } from './styled';
 
-function Home() {
+function Transacoes() {
   const [user, setUser] = useState(null);
   const [transacoes, setTransacoes] = useState([]);
 
@@ -17,15 +17,16 @@ function Home() {
       const userTransacoes = await api.get('/transactions');
       setTransacoes(userTransacoes.data.filter(t => t.account === userData.data.accountNumber));
     };
+
     fetchUserData();
   }, []);
 
   return (
     <Container>
-      <Navbar usuario={user} handleLogout={() => { localStorage.clear(); window.location.href = '/'; }} />
+      <Navbar user={user} handleLogout={() => { localStorage.clear(); window.location.href = '/'; }} />
       <Section>
         <TabelaTransacoes>
-          <h3>Últimas Transações</h3>
+          <h3>Todas as Transações</h3>
           {transacoes.length === 0 ? (
             <p>Sem transações disponíveis.</p>
           ) : (
@@ -68,12 +69,12 @@ function Home() {
             <p>Tipo: Pessoal</p>
           </DetalhesConta>
 
-          <DetalhesConta>
+          <InfoConta>
             <h4>Conta</h4>
             <p>Número: {user?.accountNumber}</p>
-            <p>Saldo: <strong>R$ {user?.balance}</strong></p>
+            <p>Saldo: R$ {user?.balance}</p>
             <p>Chave: {user?.key}</p>
-          </DetalhesConta>
+          </InfoConta>
         </div>
       </Section>
       <Footer />
@@ -81,4 +82,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Transacoes;

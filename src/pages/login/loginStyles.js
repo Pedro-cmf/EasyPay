@@ -19,7 +19,7 @@ export const LeftSide = styled.div`
     font-weight: bold;
     color:black;
     margin-bottom: 1.5rem;
-    margin-right: 12.5rem;
+    margin-right: 15.5rem;
   }
 
   p {

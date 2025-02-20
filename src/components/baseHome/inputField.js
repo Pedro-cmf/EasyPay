@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const InputField = styled.input`
+export const InputField = styled.input`
   width: 100%;
   padding: 14px;
   margin-bottom: 20px;
@@ -13,5 +13,3 @@ const InputField = styled.input`
     box-shadow: 0 0 5px rgba(0, 122, 255, 0.2);
   }
 `;
-
-export default InputField;

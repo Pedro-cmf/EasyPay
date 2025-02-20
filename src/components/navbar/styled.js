@@ -2,55 +2,73 @@ import styled from 'styled-components';
 
 export const NavContainer = styled.div`
   width: 100%;
-  height: 22%;
+  height: 130px;
   position: fixed;
   top: 0;
-  background-color: #007aff;
+  background-color: #5D9CDB;
   color: white;
   display: flex;
-  flex-direction: column; /* Empilha logo e botões */
+  flex-direction: column;
   align-items: flex-start;
-  padding: 15px 50px; /* Espaço lateral para alinhar com o modal */
+  justify-content: center;
+  padding: 15px 50px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 2000;
+  isolation: isolate;
 `;
 
 export const Logo = styled.h2`
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 10px; /* Espaço entre logo e botões */
-  margin-left: 10px;   /* Alinha a logo com o modal */
-  span {
-    color: #00d1b2;
-  }
+  height: 50px;
+  width: auto;   
+  margin-right: ${({ marginRight }) => marginRight || '0'};
+  margin-top: ${({ marginTop }) => marginTop || '0'};
+  margin-bottom: ${({ marginBottom }) => marginBottom || '0'};
+  cursor: pointer;
 `;
 
 export const NavLinks = styled.div`
   display: flex;
   gap: 15px;
-  margin-left: 10px;  /* Ajusta os botões para alinhar com o modal */
+  margin-left: 10px;
+  z-index: 100;
 `;
 
 export const NavButton = styled.button`
-  background: ${({ $active }) => ($active ? 'white' : 'transparent')};
-  color: ${({ $active }) => ($active ? '#007aff' : 'white')};
+  background: transparent;
+  color: ${({ $active }) => ($active ? 'white' : 'rgba(255, 255, 255, 0.6)')};
   padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: bold;
   border: none;
+  border-radius: 0;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
   cursor: pointer;
-  transition: 0.3s ease;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+
+  &:after {
+    content: '';
+    position: absolute;
+    height: 3px;
+    width: ${({ $active }) => ($active ? '100%' : '0%')};
+    background-color: white;
+    bottom: 0;
+    left: 0;
+    transition: width 0.3s ease-in-out;
+  }
+
+  &:hover:after {
+    width: 100%;
+  }
 
   &:hover {
-    background-color: white;
-    color: #007aff;
+    color: white;
   }
 `;
 
 export const LogoutButton = styled.button`
-  position: absolute;
-  right: 50px;
-  top: 20px;
   background-color: white;
   color: #007aff;
   padding: 8px 16px;
@@ -58,9 +76,19 @@ export const LogoutButton = styled.button`
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+`;
 
-  &:hover {
-    background-color: #f1f1f1;
+export const LogoutArea = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: absolute;
+  right: 40px;
+  top: 30px;
+
+  p {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
   }
 `;

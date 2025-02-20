@@ -1,105 +1,78 @@
 {
   "users": [
     {
-      "id": "1",
-      "name": "Felipe de Oliveira Sousa",
-      "email": "felipe.oliveira@seasolutions.io",
-      "cpfCnpj": "07005299183",
-      "password": "senha1234",
-      "accountNumber": "0001",
-      "balance": 2500,
-      "key": "4S4J7-1J8RQ-7FT00"
-    },
-    {
-      "id": "8615",
-      "email": "pedroocesarmf@gmail.com",
-      "senha": "Violento12",
-      "confirmSenha": "Violento12",
-      "nome": "Pedro César",
-      "cpfCnpj": "07005299183",
-      "isBusiness": false
-    },
-    {
-      "id": "a502",
-      "email": "pedroocesarmf@gmail.com",
-      "senha": "Violento12",
-      "confirmSenha": "Violento12",
-      "nome": "Bárbara Duarte da Silva",
-      "cpfCnpj": "01290325146",
-      "isBusiness": false
-    },
-    {
-      "id": "2679",
-      "name": "Bárbara Duarte da Silva",
-      "email": "barbara.duarte@a.ucb.br",
-      "cpfCnpj": "022.938.101-43",
-      "password": "Violento12",
-      "accountNumber": "0004",
-      "balance": 2500,
-      "key": "UWHJ9-4601-UWHJ9",
-      "isBusiness": false
-    },
-    {
-      "id": "9576",
-      "name": "Bárbara Duarte",
-      "email": "pedroocesarmf@gmail.com",
-      "cpfCnpj": "02293810143",
-      "password": "batata123",
-      "accountNumber": "00096",
-      "balance": 0,
-      "key": "dvxa88tofh"
-    },
-    {
       "id": "6979",
-      "name": "João silva",
+      "name": "João Silva",
       "email": "pedroocesarmf@gmail.com",
       "cpfCnpj": "40062829076",
       "password": "Violento12",
       "accountNumber": "00030",
-      "balance": 0,
+      "balance": 2500,
       "key": "kfedu99foq"
     },
     {
-      "id": "7637",
-      "name": "Seila",
-      "email": "barbara.duarte@a.ucb.br",
-      "cpfCnpj": "38.782.905/0001-33",
-      "password": "Violento12",
-      "accountNumber": "00055",
-      "balance": 0,
-      "key": "w1aqqsx7pun"
+      "id": "7689",
+      "name": "Maria Souza",
+      "email": "mariasouza@gmail.com",
+      "cpfCnpj": "40161829088",
+      "password": "Maria123",
+      "accountNumber": "00031",
+      "balance": 1600,
+      "key": "msouzahj76"
     },
     {
-      "id": "1535",
-      "name": "seilatb",
-      "email": "barbara.duarte@a.ucb.br",
-      "cpfCnpj": "38782905000133",
+      "id": "7888",
+      "name": "Carlos Pereira",
+      "email": "carlosp@gmail.com",
+      "cpfCnpj": "40132829099",
+      "password": "Carlos321",
+      "accountNumber": "00032",
+      "balance": 3100,
+      "key": "carlosperh7"
+    },
+    {
+      "id": "639",
+      "name": "pedro",
+      "email": "pedroocesarmf@gmail.com",
+      "cpfCnpj": "41593969090",
       "password": "Violento12",
-      "accountNumber": "00086",
+      "accountNumber": "00052",
       "balance": 0,
-      "key": "9prbswdtcdc"
+      "key": "y0ommth6ne"
     }
   ],
   "transactions": [
     {
       "id": "1",
       "type": "Entrada",
-      "value": 10,
+      "value": 500,
       "status": "Concluído",
-      "name": "José da Silva",
-      "account": "0001",
-      "key": "*********ZkpMp",
-      "date": "10/10/2024 às 09:21"
+      "name": "Maria Souza",
+      "account": "00030",
+      "key": "********h7s2k",
+      "date": "10/02/2024 às 15:12"
     },
     {
       "id": "2",
       "type": "Saída",
-      "value": 100,
-      "status": "Erro",
-      "name": "Maria Cláudia",
-      "account": "0012",
-      "key": "*********aBkaL",
-      "date": "11/10/2024 às 21:02"
+      "value": 300,
+      "status": "Concluído",
+      "name": "Carlos Pereira",
+      "account": "00030",
+      "key": "********cph76",
+      "date": "11/02/2024 às 09:00"
+    },
+    {
+      "id": "4913",
+      "chave": "kfedu99foq",
+      "valor": "10",
+      "name": "João Silva"
+    },
+    {
+      "id": "68d7",
+      "chave": "carlosperh7",
+      "valor": "11111",
+      "name": "Carlos Pereira"
     }
   ],
   "contacts": [

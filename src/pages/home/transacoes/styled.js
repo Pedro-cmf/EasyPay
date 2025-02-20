@@ -11,7 +11,7 @@ export const Container = styled.div`
 
 export const Section = styled.section`
   display: grid;
-  grid-template-columns: 1fr 300px; 
+  grid-template-columns: 1fr 300px;
   gap: 30px;
   width: 90%;
   margin: 0 auto;
@@ -44,12 +44,13 @@ export const TabelaTransacoes = styled.div`
     th, td {
       padding: 12px;
       text-align: center;
-      border-bottom: 1px solid #eaeaea;
+      border-bottom: 2px solid #dcdcdc;
     }
 
     th {
       font-weight: bold;
       background-color: #f9f9f9;
+      color: #333;
       position: sticky;
       top: 0;
       z-index: 1;
@@ -62,8 +63,22 @@ export const TabelaTransacoes = styled.div`
   }
 `;
 
+export const StatusBadge = styled.span`
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+  background-color: ${({ status }) =>
+    status === 'Concluído'
+      ? '#007aff'  // Verde para concluído
+      : status === 'Erro'
+      ? '#dc3545'  // Vermelho para erro
+      : '#ffc107'}; 
+`;
+
 export const DetalhesConta = styled.div`
-  background-color: white;
+  background-color: #fff;
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
@@ -83,38 +98,8 @@ export const DetalhesConta = styled.div`
     font-size: 16px;
     color: #555;
   }
-
-  span {
-    color: #007aff;
-    font-weight: bold;
-  }
 `;
 
 export const InfoConta = styled(DetalhesConta)`
   margin-top: 20px;
-`;
-
-export const StatusBadge = styled.span`
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 15px;
-  color: white;
-  font-weight: bold;
-  background-color: ${({ status }) => (status === 'Concluído' ? '#007aff' : '#ff4d4f')};
-`;
-
-
-export const Header = styled.header`
-  width: 100%;
-  height: 120px;
-  background-color: #007aff;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  padding: 20px 40px;
-  position: fixed;
-  top: 0;
-  z-index: 100;
 `;
