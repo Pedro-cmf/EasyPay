@@ -10,70 +10,55 @@ export const Container = styled.div`
 `;
 
 export const Section = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 300px;
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 5rem;
   gap: 30px;
   width: 90%;
   margin: 0 auto;
   height: calc(100vh - 140px);
 
   @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     height: auto;
   }
 `;
 
-export const TransferContainer = styled.div`
-  width: 65%;
-  background-color: #fff;
+export const TabelaTransacoes = styled.div`
+  background-color: white;
   padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  width: 65%;
+  height: 100%;
 
-  h2 {
-    font-size: 24px;
+  h3 {
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
-`;
 
+  table {
+    width: 100%;
+    border-collapse: collapse;
 
-export const StepIndicator = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding: 0 20%;
-
-  .step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-weight: bold;
-    color: #ccc;
-
-    .circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #ddd;
-      color: white;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-      margin-bottom: 8px;
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #eaeaea;
     }
 
-    &.active,
-    &.completed {
-      color: #007aff;
-      .circle {
-        background-color: #007aff;
-      }
+    th {
+      font-weight: bold;
+      background-color: #f9f9f9;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f1f1;
     }
   }
 `;
@@ -86,6 +71,8 @@ export const DetalhesConta = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 30%;
+  height: fit-content;
   position: sticky;
   top: 130px;
 

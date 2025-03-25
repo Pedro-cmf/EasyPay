@@ -7,7 +7,7 @@
       "cpfCnpj": "40062829076",
       "password": "Violento12",
       "accountNumber": "00030",
-      "balance": 2500,
+      "balance": 2498,
       "key": "kfedu99foq"
     },
     {
@@ -39,6 +39,36 @@
       "accountNumber": "00052",
       "balance": 0,
       "key": "y0ommth6ne"
+    },
+    {
+      "id": "2699",
+      "name": "Pedro César",
+      "email": "batata@gmail.com",
+      "cpfCnpj": "01299123176",
+      "password": "pedro123",
+      "accountNumber": "00055",
+      "balance": 0,
+      "key": "ypyaqma5zri"
+    },
+    {
+      "id": "7350",
+      "name": "João Batista",
+      "email": "batata@gmail.com",
+      "cpfCnpj": "20339932058",
+      "password": "batata123",
+      "accountNumber": "00075",
+      "balance": 0,
+      "key": "eexzrxlu2yu"
+    },
+    {
+      "id": "3683",
+      "name": "Pedro César",
+      "email": "querovaga@gmail.com",
+      "cpfCnpj": "01444031023",
+      "password": "Violento90",
+      "accountNumber": "00074",
+      "balance": 0,
+      "key": "gxyeb3fl8iu"
     }
   ],
   "transactions": [
@@ -79,6 +109,15 @@
       "chave": "carlosperh7",
       "valor": "2",
       "name": "Carlos Pereira"
+    },
+    {
+      "id": "6593",
+      "type": "Saída",
+      "value": 2,
+      "status": "Concluído",
+      "name": "Carlos Pereira",
+      "account": "00030",
+      "date": "19/02/2025, 23:31:01"
     }
   ],
   "contacts": [

@@ -10,15 +10,16 @@ export const Container = styled.div`
 `;
 
 export const Section = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 300px;
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 5rem;
   gap: 30px;
   width: 90%;
   margin: 0 auto;
   height: calc(100vh - 140px);
 
   @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     height: auto;
   }
 `;
@@ -29,7 +30,8 @@ export const TabelaTransacoes = styled.div`
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
-  height: 76%;
+  width: 65%;
+  height: 100%;
 
   h3 {
     font-size: 20px;
@@ -44,13 +46,12 @@ export const TabelaTransacoes = styled.div`
     th, td {
       padding: 12px;
       text-align: center;
-      border-bottom: 2px solid #dcdcdc;
+      border-bottom: 1px solid #eaeaea;
     }
 
     th {
       font-weight: bold;
       background-color: #f9f9f9;
-      color: #333;
       position: sticky;
       top: 0;
       z-index: 1;
@@ -58,23 +59,8 @@ export const TabelaTransacoes = styled.div`
 
     tbody tr:hover {
       background-color: #f1f1f1;
-      transition: background-color 0.2s ease;
     }
   }
-`;
-
-export const StatusBadge = styled.span`
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 15px;
-  color: white;
-  font-weight: bold;
-  background-color: ${({ status }) =>
-    status === 'Concluído'
-      ? '#007aff'  // Verde para concluído
-      : status === 'Erro'
-      ? '#dc3545'  // Vermelho para erro
-      : '#ffc107'}; 
 `;
 
 export const DetalhesConta = styled.div`
@@ -85,6 +71,8 @@ export const DetalhesConta = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 30%;
+  height: fit-content;
   position: sticky;
   top: 130px;
 
@@ -98,8 +86,4 @@ export const DetalhesConta = styled.div`
     font-size: 16px;
     color: #555;
   }
-`;
-
-export const InfoConta = styled(DetalhesConta)`
-  margin-top: 20px;
 `;

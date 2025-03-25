@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "../../components/input/input";
 import Button from "../../components/button/button";
-import { Container, LeftSide, RightSide } from "./loginStyles";
+import { Container, LeftSide, RightSide, Title, LinkButton } from "./loginStyles";
 import Logo from "../../components/logo/logo";
 import { login } from "../../services/authService.js";
 import OpenAccountModal from "../../components/modal/criarConta/criarConta.jsx";
@@ -38,7 +38,7 @@ function Login() {
     <Container>
       <LeftSide>
         <Logo />
-        <h1>Acesse sua conta</h1>
+        <Title>Acesse sua conta</Title>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input label="Login" type="text" placeholder="Digite seu CPF ou CNPJ" {...register("cpfCnpj")} />
           {errors.cpfCnpj && <p style={{ color: 'red' }}>{errors.cpfCnpj.message}</p>}
@@ -48,7 +48,10 @@ function Login() {
 
           <Button type="submit">Entrar</Button>
         </form>
-        <p>Ainda não é membro? <button onClick={() => setModalIsOpen(true)}>Abra sua conta!</button></p>
+        <p>
+  Ainda não é membro? <LinkButton onClick={() => setModalIsOpen(true)}>Abra sua conta!</LinkButton>
+</p>
+
         {modalIsOpen && <OpenAccountModal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)} />}
       </LeftSide>
       <RightSide />

@@ -5,6 +5,15 @@ export const Container = styled.div`
   height: 100vh;
 `;
 
+export const Title = styled.h1`
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 1.8rem;
+  margin-left: 0;
+
+`;
+
 export const LeftSide = styled.div`
   flex: 1;
   background-color: white;
@@ -14,13 +23,6 @@ export const LeftSide = styled.div`
   align-items: center;
   padding: 2rem;
   
-  h1 {
-    font-size: 20px;
-    font-weight: bold;
-    color:black;
-    margin-bottom: 1.5rem;
-    margin-right: 15.5rem;
-  }
 
   p {
     font-size: 14px;
@@ -43,4 +45,20 @@ export const RightSide = styled.div`
   background-image: url('/src/assets/img-principal.png');
   background-size: cover;
   background-position: center;
+`;
+
+// styled.js
+export const LinkButton = styled.button`
+  background: none;
+  border: none;
+  color: #5D9CDB;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
 `;

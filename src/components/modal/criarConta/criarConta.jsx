@@ -28,7 +28,7 @@ function OpenAccountModal({ isOpen, onRequestClose }) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === 'cpfCnpj' ? value.replace(/\D/g, '') : value // Limpeza do CPF/CNPJ
+      [name]: name === 'cpfCnpj' ? value.replace(/\D/g, '') : value
     });
   };
 
@@ -77,10 +77,10 @@ function OpenAccountModal({ isOpen, onRequestClose }) {
     <ModalOverlay onClick={onRequestClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
-          <ModalTitle>Abra sua conta no <span>sea</span>Pay</ModalTitle>
+          <ModalTitle>Abra sua conta no <span>Easy</span>Pay</ModalTitle>
           <CloseButton onClick={onRequestClose}>×</CloseButton>
         </ModalHeader>
-        <ParagrafoPrincipal>Complete os campos abaixo para abrir sua conta seaPay.</ParagrafoPrincipal>
+        <ParagrafoPrincipal>Complete os campos abaixo para abrir sua conta EasyPay.</ParagrafoPrincipal>
         <form onSubmit={handleSubmit}>
           <Labels>Email*</Labels>
           <FormInput name="email" type="email" placeholder="exemplo@email.com" onChange={handleChange} required />

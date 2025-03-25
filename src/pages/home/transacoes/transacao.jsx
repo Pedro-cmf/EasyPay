@@ -2,23 +2,24 @@ import React, { useEffect, useState } from 'react';
 import api from '../../../../api/api ';
 import Navbar from '../../../components/navbar/navBar';
 import Footer from '../../../components/footer/footer';
-import { Container, Section, TabelaTransacoes, DetalhesConta, InfoConta, StatusBadge } from './styled';
+import { Container, Section, TabelaTransacoes, DetalhesConta } from './styled';
 
 function Transacoes() {
   const [user, setUser] = useState(null);
   const [transacoes, setTransacoes] = useState([]);
 
+  const fetchUserData = async () => {
+    const usuarioLogado = JSON.parse(localStorage.getItem('usuario'));
+    const userData = await api.get(`/users/${usuarioLogado.id}`);
+    setUser(userData.data);
+    const userTransacoes = await api.get('/transactions');
+    setTransacoes(userTransacoes.data.filter(t => t.account === userData.data.accountNumber));
+  };
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      const usuarioLogado = JSON.parse(localStorage.getItem('usuario'));
-      const userData = await api.get(`/users/${usuarioLogado.id}`);
-      setUser(userData.data);
-
-      const userTransacoes = await api.get('/transactions');
-      setTransacoes(userTransacoes.data.filter(t => t.account === userData.data.accountNumber));
-    };
-
     fetchUserData();
+    window.addEventListener('storage', fetchUserData);
+    return () => window.removeEventListener('storage', fetchUserData);
   }, []);
 
   return (
@@ -27,9 +28,7 @@ function Transacoes() {
       <Section>
         <TabelaTransacoes>
           <h3>Todas as Transações</h3>
-          {transacoes.length === 0 ? (
-            <p>Sem transações disponíveis.</p>
-          ) : (
+          {transacoes.length === 0 ? <p>Sem transações disponíveis.</p> : (
             <table>
               <thead>
                 <tr>
@@ -42,18 +41,16 @@ function Transacoes() {
                 </tr>
               </thead>
               <tbody>
-                {transacoes.map((transacao) => (
-                  <tr key={transacao.id}>
-                    <td>{transacao.type}</td>
-                    <td>R$ {transacao.value}</td>
+                {transacoes.map((t) => (
+                  <tr key={t.id}>
+                    <td>{t.type}</td>
+                    <td>R$ {t.value}</td>
                     <td>
-                      <StatusBadge status={transacao.status}>
-                        {transacao.status}
-                      </StatusBadge>
+                      
                     </td>
-                    <td>{transacao.name}</td>
-                    <td>{transacao.account}</td>
-                    <td>{transacao.date}</td>
+                    <td>{t.name}</td>
+                    <td>{t.account}</td>
+                    <td>{t.date}</td>
                   </tr>
                 ))}
               </tbody>
@@ -61,21 +58,12 @@ function Transacoes() {
           )}
         </TabelaTransacoes>
 
-        <div>
-          <DetalhesConta>
-            <h4>Detalhes</h4>
-            <p>Nome: {user?.name}</p>
-            <p>E-mail: {user?.email}</p>
-            <p>Tipo: Pessoal</p>
-          </DetalhesConta>
-
-          <InfoConta>
-            <h4>Conta</h4>
-            <p>Número: {user?.accountNumber}</p>
-            <p>Saldo: R$ {user?.balance}</p>
-            <p>Chave: {user?.key}</p>
-          </InfoConta>
-        </div>
+        <DetalhesConta>
+          <h4>Conta</h4>
+          <p>Nome: {user?.name}</p>
+          <p>Saldo: R$ {user?.balance}</p>
+          <p>Chave: {user?.key}</p>
+        </DetalhesConta>
       </Section>
       <Footer />
     </Container>
