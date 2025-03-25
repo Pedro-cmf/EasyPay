@@ -69,6 +69,16 @@
       "accountNumber": "00074",
       "balance": 0,
       "key": "gxyeb3fl8iu"
+    },
+    {
+      "id": "8066",
+      "name": "Pedro França",
+      "email": "queroemprego@gmail.com",
+      "cpfCnpj": "14337672010",
+      "password": "batata123@",
+      "accountNumber": "0006",
+      "balance": 0,
+      "key": "o5ttxpysqy9"
     }
   ],
   "transactions": [
