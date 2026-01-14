@@ -1,10 +1,22 @@
-import React from "react";
-import { ButtonStyled } from "./styles";
+import { ButtonStyled } from './styles';
 
-function Button({ children, ...props }){
-    return(
-        <ButtonStyled {...props}>{children}</ButtonStyled>
-    )
+function Button({
+  children,
+  variant = 'primary',
+  size = 'md',
+  fullWidth = false,
+  ...props
+}) {
+  return (
+    <ButtonStyled
+      $variant={variant}
+      $size={size}
+      $fullWidth={fullWidth}
+      {...props}
+    >
+      {children}
+    </ButtonStyled>
+  );
 }
 
 export default Button;

@@ -1,32 +1,56 @@
-import React from 'react';
-import { NavContainer, NavButton, NavLinks, LogoutArea, LogoutButton } from "./styled";
-import Logo from "../../components/logo/logo";
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AiOutlineHome } from 'react-icons/ai';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { BiTime } from 'react-icons/bi';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { FiLogOut } from 'react-icons/fi';
+import Logo from '../logo/logo';
+import {
+  NavContainer,
+  LogoArea,
+  NavLinks,
+  NavButton,
+  LogoutArea,
+  UserGreeting,
+  LogoutButton,
+} from './styled';
 
-function Navbar({ usuario, handleLogout }) {
+function Navbar({ user, handleLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const navItems = [
+    { path: '/home', label: 'Início', icon: AiOutlineHome },
+    { path: '/transferencia', label: 'Transferir', icon: BsCurrencyDollar },
+    { path: '/transacoes', label: 'Transações', icon: BiTime },
+  ];
+
   return (
     <NavContainer>
-      <Logo width="15vh" marginRight="5rem" marginTop="0.5rem" marginBottom="1rem" />
+      <LogoArea>
+        <Logo width="120px" />
+      </LogoArea>
+
       <NavLinks>
-        <NavButton $active={location.pathname === '/home'} onClick={() => navigate('/home')}>
-          <AiOutlineHome size={20} /> Início
-        </NavButton>
-        <NavButton $active={location.pathname === '/transferencia'} onClick={() => navigate('/transferencia')}>
-          <BsCurrencyDollar size={20} /> Transferência
-        </NavButton>
-        <NavButton $active={location.pathname === '/transacoes'} onClick={() => navigate('/transacoes')}>
-          <BiTime size={20} /> Transações
-        </NavButton>
+        {navItems.map(({ path, label, icon: Icon }) => (
+          <NavButton
+            key={path}
+            $active={location.pathname === path}
+            onClick={() => navigate(path)}
+          >
+            <Icon />
+            <span>{label}</span>
+          </NavButton>
+        ))}
       </NavLinks>
+
       <LogoutArea>
-        <p>Olá, <strong>{usuario?.name || 'Usuário'}</strong>!</p>
-        <LogoutButton onClick={handleLogout}>Sair</LogoutButton>
+        <UserGreeting>
+          Olá, <strong>{user?.name || 'Usuário'}</strong>
+        </UserGreeting>
+        <LogoutButton onClick={handleLogout}>
+          <FiLogOut />
+          Sair
+        </LogoutButton>
       </LogoutArea>
     </NavContainer>
   );

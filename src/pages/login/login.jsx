@@ -8,7 +8,15 @@ import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import Logo from '../../components/logo/logo';
 import OpenAccountModal from '../../components/modal/criarConta/criarConta';
-import { Container, LeftSide, RightSide, Title, LinkButton, ErrorMessage } from './loginStyles';
+import {
+  Container,
+  LeftSide,
+  RightSide,
+  Title,
+  LinkButton,
+  ErrorMessage,
+  LogoWrapper,
+} from './loginStyles';
 
 const schema = z.object({
   cpfCnpj: z
@@ -48,32 +56,30 @@ function Login() {
   return (
     <Container>
       <LeftSide>
-        <Logo />
+        <LogoWrapper>
+          <Logo width="180px" />
+        </LogoWrapper>
         <Title>Acesse sua conta</Title>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
-            label="Login"
+            label="CPF ou CNPJ"
             type="text"
             placeholder="Digite seu CPF ou CNPJ"
+            error={errors.cpfCnpj}
             {...register('cpfCnpj')}
           />
-          {errors.cpfCnpj && (
-            <ErrorMessage>{errors.cpfCnpj.message}</ErrorMessage>
-          )}
 
           <Input
             label="Senha"
             type="password"
             placeholder="Digite sua senha"
+            error={errors.password}
             {...register('password')}
           />
-          {errors.password && (
-            <ErrorMessage>{errors.password.message}</ErrorMessage>
-          )}
 
           {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
 
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} fullWidth size="lg">
             {isSubmitting ? 'Entrando...' : 'Entrar'}
           </Button>
         </form>

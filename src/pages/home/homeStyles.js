@@ -5,36 +5,58 @@ export const Container = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-top: 130px;
-  background-color: #f5f5f5;
+  padding-top: 90px;
+  padding-bottom: 70px;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Section = styled.section`
   display: grid;
-  grid-template-columns: 1fr 300px; 
-  gap: 30px;
-  width: 90%;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  height: calc(100vh - 140px);
+  padding: 24px;
+  flex: 1;
 
-  @media (max-width: 1024px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     grid-template-columns: 1fr;
-    height: auto;
+    max-width: 800px;
   }
 `;
 
 export const TabelaTransacoes = styled.div`
-  background-color: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  overflow-y: auto;
-  height: 76%;
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: 24px;
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadow.md};
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   h3 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 15px;
+    font-size: ${({ theme }) => theme.fontSize.xl};
+    font-weight: ${({ theme }) => theme.fontWeight.semibold};
+    color: ${({ theme }) => theme.colors.text};
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: linear-gradient(180deg, ${({ theme }) => theme.colors.primary} 0%, #0056b3 100%);
+      border-radius: 2px;
+    }
+  }
+
+  > p {
+    color: ${({ theme }) => theme.colors.textMuted};
+    text-align: center;
+    padding: 40px 0;
   }
 
   table {
@@ -42,79 +64,107 @@ export const TabelaTransacoes = styled.div`
     border-collapse: collapse;
 
     th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #eaeaea;
+      padding: 14px 16px;
+      text-align: left;
     }
 
     th {
-      font-weight: bold;
-      background-color: #f9f9f9;
-      position: sticky;
-      top: 0;
-      z-index: 1;
+      font-size: ${({ theme }) => theme.fontSize.xs};
+      font-weight: ${({ theme }) => theme.fontWeight.semibold};
+      color: ${({ theme }) => theme.colors.textMuted};
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background-color: ${({ theme }) => theme.colors.background};
+      border-bottom: 2px solid ${({ theme }) => theme.colors.border};
     }
 
-    tbody tr:hover {
-      background-color: #f1f1f1;
-      transition: background-color 0.2s ease;
+    td {
+      font-size: ${({ theme }) => theme.fontSize.sm};
+      color: ${({ theme }) => theme.colors.text};
+      border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+    }
+
+    tbody tr {
+      transition: background-color ${({ theme }) => theme.transition.fast};
+
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.background};
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
     }
   }
 `;
 
-export const DetalhesConta = styled.div`
-  background-color: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+export const DetalhesConta = styled.aside`
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: 24px;
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadow.md};
+  height: fit-content;
   position: sticky;
-  top: 130px;
+  top: 90px;
 
   h4 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: ${({ theme }) => theme.fontSize.lg};
+    font-weight: ${({ theme }) => theme.fontWeight.semibold};
+    color: ${({ theme }) => theme.colors.text};
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.background};
   }
 
   p {
-    font-size: 16px;
-    color: #555;
-  }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    color: ${({ theme }) => theme.colors.textLight};
+    padding: 12px 0;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
-  span {
-    color: #007aff;
-    font-weight: bold;
+    &:last-child {
+      border-bottom: none;
+    }
   }
 `;
 
-export const InfoConta = styled(DetalhesConta)`
-  margin-top: 20px;
+export const AccountValue = styled.span`
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  color: ${({ theme, $highlight }) => $highlight ? theme.colors.success : theme.colors.text};
+  font-size: ${({ $large }) => $large ? '1.25rem' : 'inherit'};
 `;
 
 export const StatusBadge = styled.span`
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 15px;
-  color: white;
-  font-weight: bold;
-  background-color: ${({ status }) => (status === 'Concluído' ? '#007aff' : '#ff4d4f')};
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: ${({ theme }) => theme.borderRadius.full};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  background-color: ${({ theme, $status }) =>
+    $status === 'Concluído' ? theme.colors.successLight : theme.colors.errorLight};
+  color: ${({ theme, $status }) =>
+    $status === 'Concluído' ? theme.colors.success : theme.colors.error};
 `;
 
-
-export const Header = styled.header`
-  width: 100%;
-  height: 120px;
-  background-color: #007aff;
-  color: white;
+export const EmptyState = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-direction: column;
-  padding: 20px 40px;
-  position: fixed;
-  top: 0;
-  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: ${({ theme }) => theme.colors.textMuted};
+
+  svg {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: ${({ theme }) => theme.fontSize.md};
+  }
 `;

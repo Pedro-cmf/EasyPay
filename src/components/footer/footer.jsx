@@ -1,10 +1,13 @@
-import React from 'react';
 import { FooterContainer } from './footerStyles';
 
 function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <FooterContainer>
-      © 2024 EasyPay Instituição de Pagamento S/A. CNPJ 00.000.000/0000-21 Edifício Los Santos Brasília - DF
+      <span>&copy; {currentYear}</span> EasyPay Instituição de Pagamento S/A
+      <span>|</span> CNPJ 00.000.000/0000-21
+      <span>|</span> Brasília - DF
     </FooterContainer>
   );
 }

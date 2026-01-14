@@ -4,11 +4,21 @@ import { useAuth } from '../../hooks/useAuth';
 import { useTransactions } from '../../hooks/useTransactions';
 import Navbar from '../../components/navbar/navBar';
 import Footer from '../../components/footer/footer';
+import Input from '../../components/input/input';
+import Button from '../../components/button/button';
 import {
   Container,
   Section,
   TabelaTransacoes,
   DetalhesConta,
+  AccountValue,
+  FormGroup,
+  StepIndicator,
+  Step,
+  StepDivider,
+  RecipientCard,
+  ButtonGroup,
+  ErrorAlert,
 } from './transferenciaStyles';
 
 function Transferencia() {
@@ -24,6 +34,13 @@ function Transferencia() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value || 0);
+  };
 
   const handleNext = async () => {
     if (!formData.chave.trim()) {
@@ -54,7 +71,7 @@ function Transferencia() {
     }
 
     if (valor > (user?.balance || 0)) {
-      setError('Saldo insuficiente');
+      setError('Saldo insuficiente para esta transferência');
       return;
     }
 
@@ -88,30 +105,47 @@ function Transferencia() {
         <TabelaTransacoes>
           <h3>Nova Transferência</h3>
 
-          {error && <p style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
+          <StepIndicator>
+            <Step $active={step === 1} $completed={step > 1}>
+              <span className="number">{step > 1 ? '✓' : '1'}</span>
+              <span className="label">Destinatário</span>
+            </Step>
+            <StepDivider $completed={step > 1} />
+            <Step $active={step === 2}>
+              <span className="number">2</span>
+              <span className="label">Valor</span>
+            </Step>
+          </StepIndicator>
+
+          {error && <ErrorAlert>{error}</ErrorAlert>}
 
           {step === 1 && (
-            <>
-              <input
-                placeholder="Chave PIX do destinatário"
+            <FormGroup>
+              <Input
+                label="Chave PIX do destinatário"
+                placeholder="Digite a chave PIX"
                 value={formData.chave}
                 onChange={(e) =>
                   setFormData({ ...formData, chave: e.target.value })
                 }
                 disabled={isLoading}
               />
-              <button onClick={handleNext} disabled={isLoading}>
-                {isLoading ? 'Buscando...' : 'Próximo'}
-              </button>
-            </>
+              <Button onClick={handleNext} disabled={isLoading} fullWidth>
+                {isLoading ? 'Buscando...' : 'Continuar'}
+              </Button>
+            </FormGroup>
           )}
 
           {step === 2 && (
-            <>
-              <p>Para: {formData.name}</p>
-              <p>Chave: {formData.chave}</p>
-              <input
-                placeholder="Valor (R$)"
+            <FormGroup>
+              <RecipientCard>
+                <p>{formData.name}</p>
+                <p>Chave: {formData.chave}</p>
+              </RecipientCard>
+
+              <Input
+                label="Valor da transferência"
+                placeholder="R$ 0,00"
                 type="number"
                 min="0.01"
                 step="0.01"
@@ -121,23 +155,39 @@ function Transferencia() {
                 }
                 disabled={isLoading}
               />
-              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                <button onClick={handleBack} disabled={isLoading}>
+
+              <ButtonGroup>
+                <Button
+                  variant="secondary"
+                  onClick={handleBack}
+                  disabled={isLoading}
+                >
                   Voltar
-                </button>
-                <button onClick={handleSubmit} disabled={isLoading}>
-                  {isLoading ? 'Processando...' : 'Confirmar'}
-                </button>
-              </div>
-            </>
+                </Button>
+                <Button onClick={handleSubmit} disabled={isLoading} fullWidth>
+                  {isLoading ? 'Processando...' : 'Confirmar Transferência'}
+                </Button>
+              </ButtonGroup>
+            </FormGroup>
           )}
         </TabelaTransacoes>
 
         <DetalhesConta>
-          <h4>Conta</h4>
-          <p>Nome: {user?.name}</p>
-          <p>Saldo: R$ {user?.balance?.toFixed(2)}</p>
-          <p>Chave: {user?.key}</p>
+          <h4>Minha Conta</h4>
+          <p>
+            Nome
+            <AccountValue>{user?.name}</AccountValue>
+          </p>
+          <p>
+            Saldo disponível
+            <AccountValue $highlight $large>
+              {formatCurrency(user?.balance)}
+            </AccountValue>
+          </p>
+          <p>
+            Chave PIX
+            <AccountValue>{user?.key}</AccountValue>
+          </p>
         </DetalhesConta>
       </Section>
       <Footer />

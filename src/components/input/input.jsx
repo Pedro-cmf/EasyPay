@@ -1,14 +1,30 @@
-import React from "react";
-import { InputStyled, LabelStyled } from "./styles";
+import { forwardRef } from 'react';
+import { InputWrapper, InputStyled, LabelStyled, ErrorText, HelperText } from './styles';
 
-function Input({ label, type, placeholder, error, ...rest }) {
+const Input = forwardRef(({
+  label,
+  type = 'text',
+  placeholder,
+  error,
+  helperText,
+  ...rest
+}, ref) => {
   return (
-    <LabelStyled>
-      <h5>{label}</h5>
-      <InputStyled type={type} placeholder={placeholder} {...rest} />
-      {error && <p style={{ color: 'red' }}>{error.message}</p>}
-    </LabelStyled>
+    <InputWrapper>
+      {label && <LabelStyled>{label}</LabelStyled>}
+      <InputStyled
+        ref={ref}
+        type={type}
+        placeholder={placeholder}
+        $hasError={!!error}
+        {...rest}
+      />
+      {error && <ErrorText>{error.message || error}</ErrorText>}
+      {!error && helperText && <HelperText>{helperText}</HelperText>}
+    </InputWrapper>
   );
-}
+});
+
+Input.displayName = 'Input';
 
 export default Input;

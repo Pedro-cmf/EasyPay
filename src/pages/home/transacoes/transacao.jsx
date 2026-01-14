@@ -2,11 +2,25 @@ import { useAuth } from '../../../hooks/useAuth';
 import { useTransactions } from '../../../hooks/useTransactions';
 import Navbar from '../../../components/navbar/navBar';
 import Footer from '../../../components/footer/footer';
-import { Container, Section, TabelaTransacoes, DetalhesConta } from './styled';
+import {
+  Container,
+  Section,
+  TabelaTransacoes,
+  DetalhesConta,
+  AccountValue,
+  StatusBadge,
+} from './styled';
 
 function Transacoes() {
   const { user, logout } = useAuth();
   const { transactions, loading, error } = useTransactions();
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value || 0);
+  };
 
   return (
     <Container>
@@ -19,7 +33,7 @@ function Transacoes() {
           ) : error ? (
             <p>{error}</p>
           ) : transactions.length === 0 ? (
-            <p>Sem transações disponíveis.</p>
+            <p>Nenhuma transação encontrada</p>
           ) : (
             <table>
               <thead>
@@ -27,8 +41,7 @@ function Transacoes() {
                   <th>Tipo</th>
                   <th>Valor</th>
                   <th>Status</th>
-                  <th>Nome</th>
-                  <th>Conta</th>
+                  <th>Destinatário</th>
                   <th>Data</th>
                 </tr>
               </thead>
@@ -36,10 +49,11 @@ function Transacoes() {
                 {transactions.map((t) => (
                   <tr key={t.id}>
                     <td>{t.type}</td>
-                    <td>R$ {t.value || t.valor}</td>
-                    <td>{t.status}</td>
+                    <td>{formatCurrency(t.value || t.valor)}</td>
+                    <td>
+                      <StatusBadge $status={t.status}>{t.status}</StatusBadge>
+                    </td>
                     <td>{t.name}</td>
-                    <td>{t.account}</td>
                     <td>{t.date}</td>
                   </tr>
                 ))}
@@ -49,10 +63,25 @@ function Transacoes() {
         </TabelaTransacoes>
 
         <DetalhesConta>
-          <h4>Conta</h4>
-          <p>Nome: {user?.name}</p>
-          <p>Saldo: R$ {user?.balance?.toFixed(2)}</p>
-          <p>Chave: {user?.key}</p>
+          <h4>Minha Conta</h4>
+          <p>
+            Nome
+            <AccountValue>{user?.name}</AccountValue>
+          </p>
+          <p>
+            Saldo disponível
+            <AccountValue $highlight $large>
+              {formatCurrency(user?.balance)}
+            </AccountValue>
+          </p>
+          <p>
+            Chave PIX
+            <AccountValue>{user?.key}</AccountValue>
+          </p>
+          <p>
+            Conta
+            <AccountValue>{user?.accountNumber}</AccountValue>
+          </p>
         </DetalhesConta>
       </Section>
       <Footer />
