@@ -3,7 +3,7 @@ import api from '../services/api';
 import { useAuth } from './useAuth';
 
 export function useTransactions() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,7 +31,12 @@ export function useTransactions() {
   }, [fetchTransactions]);
 
   const createTransaction = useCallback(async (transactionData) => {
+    if (!user) throw new Error('Usuário não autenticado');
+
+    const valor = parseFloat(transactionData.value);
+
     try {
+      // Criar a transação
       const newTransaction = {
         ...transactionData,
         account: user.accountNumber,
@@ -41,12 +46,29 @@ export function useTransactions() {
       };
 
       const response = await api.post('/transactions', newTransaction);
+
+      // Atualizar saldo do usuário que enviou (diminuir)
+      const newBalance = user.balance - valor;
+      await api.patch(`/users/${user.id}`, { balance: newBalance });
+
+      // Atualizar saldo do destinatário (aumentar)
+      const usersResponse = await api.get('/users');
+      const recipient = usersResponse.data.find((u) => u.key === transactionData.chave);
+      if (recipient) {
+        const recipientNewBalance = recipient.balance + valor;
+        await api.patch(`/users/${recipient.id}`, { balance: recipientNewBalance });
+      }
+
       setTransactions((prev) => [...prev, response.data]);
+
+      // Atualizar dados do usuário no contexto
+      await refreshUser();
+
       return response.data;
     } catch (err) {
       throw new Error('Erro ao criar transação');
     }
-  }, [user?.accountNumber]);
+  }, [user, refreshUser]);
 
   const findUserByPixKey = useCallback(async (pixKey) => {
     try {

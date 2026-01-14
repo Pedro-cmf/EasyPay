@@ -23,7 +23,7 @@ import {
 
 function Transferencia() {
   const navigate = useNavigate();
-  const { user, logout, refreshUser } = useAuth();
+  const { user, logout } = useAuth();
   const { createTransaction, findUserByPixKey } = useTransactions();
 
   const [step, setStep] = useState(1);
@@ -84,7 +84,6 @@ function Transferencia() {
         value: valor,
         name: formData.name,
       });
-      await refreshUser();
       navigate('/transacoes');
     } catch (err) {
       setError(err.message);
