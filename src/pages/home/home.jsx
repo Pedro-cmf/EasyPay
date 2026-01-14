@@ -1,32 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import api from '../../../api/api ';
-import Navbar from '../../components/navbar/navBar'
+import { useAuth } from '../../hooks/useAuth';
+import { useTransactions } from '../../hooks/useTransactions';
+import Navbar from '../../components/navbar/navBar';
 import Footer from '../../components/footer/footer';
 import { Container, Section, TabelaTransacoes, DetalhesConta } from './homeStyles';
 
 function Home() {
-  const [user, setUser] = useState(null);
-  const [transacoes, setTransacoes] = useState([]);
+  const { user, logout } = useAuth();
+  const { transactions, loading, error } = useTransactions();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const usuarioLogado = JSON.parse(localStorage.getItem('usuario'));
-      const userData = await api.get(`/users/${usuarioLogado.id}`);
-      setUser(userData.data);
-
-      const userTransacoes = await api.get('/transactions');
-      setTransacoes(userTransacoes.data.filter(t => t.account === userData.data.accountNumber));
-    };
-    fetchUserData();
-  }, []);
+  const recentTransactions = transactions.slice(-5).reverse();
 
   return (
     <Container>
-      <Navbar user={user} handleLogout={() => { localStorage.clear(); window.location.href = '/'; }} />
+      <Navbar user={user} handleLogout={logout} />
       <Section>
         <TabelaTransacoes>
           <h3>Últimas Transações</h3>
-          {transacoes.length === 0 ? (
+          {loading ? (
+            <p>Carregando transações...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : recentTransactions.length === 0 ? (
             <p>Sem transações disponíveis.</p>
           ) : (
             <table>
@@ -41,10 +35,10 @@ function Home() {
                 </tr>
               </thead>
               <tbody>
-                {transacoes.map((t) => (
+                {recentTransactions.map((t) => (
                   <tr key={t.id}>
                     <td>{t.type}</td>
-                    <td>R$ {t.value}</td>
+                    <td>R$ {t.value || t.valor}</td>
                     <td>{t.status}</td>
                     <td>{t.name}</td>
                     <td>{t.account}</td>
@@ -59,7 +53,7 @@ function Home() {
         <DetalhesConta>
           <h4>Conta</h4>
           <p>Nome: {user?.name}</p>
-          <p>Saldo: R$ {user?.balance}</p>
+          <p>Saldo: R$ {user?.balance?.toFixed(2)}</p>
           <p>Chave: {user?.key}</p>
         </DetalhesConta>
       </Section>

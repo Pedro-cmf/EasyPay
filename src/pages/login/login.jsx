@@ -1,36 +1,47 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "../../components/input/input";
-import Button from "../../components/button/button";
-import { Container, LeftSide, RightSide, Title, LinkButton } from "./loginStyles";
-import Logo from "../../components/logo/logo";
-import { login } from "../../services/authService.js";
-import OpenAccountModal from "../../components/modal/criarConta/criarConta.jsx";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useAuth } from '../../hooks/useAuth';
+import Input from '../../components/input/input';
+import Button from '../../components/button/button';
+import Logo from '../../components/logo/logo';
+import OpenAccountModal from '../../components/modal/criarConta/criarConta';
+import { Container, LeftSide, RightSide, Title, LinkButton, ErrorMessage } from './loginStyles';
 
 const schema = z.object({
-  cpfCnpj: z.string().min(11, "CPF ou CNPJ inválido").max(14, "CPF ou CNPJ inválido"),
-  password: z.string().min(8, "Senha deve ter no mínimo 8 caracteres"),
+  cpfCnpj: z
+    .string()
+    .min(11, 'CPF ou CNPJ inválido')
+    .max(14, 'CPF ou CNPJ inválido'),
+  password: z
+    .string()
+    .min(8, 'Senha deve ter no mínimo 8 caracteres'),
 });
 
 function Login() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { login } = useAuth();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = async (data) => {
     try {
-      const cleanData = { ...data, cpfCnpj: data.cpfCnpj.replace(/\D/g, '') };
-      const user = await login(cleanData);
-      localStorage.setItem("usuario", JSON.stringify(user));
-      navigate("/home");
+      setLoginError('');
+      const cleanCpfCnpj = data.cpfCnpj.replace(/\D/g, '');
+      await login(cleanCpfCnpj, data.password);
+      navigate('/home');
     } catch (error) {
-      console.error('Erro no login:', error);
-      alert(error.message);
+      setLoginError(error.message || 'Erro ao fazer login');
     }
   };
 
@@ -40,19 +51,45 @@ function Login() {
         <Logo />
         <Title>Acesse sua conta</Title>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Input label="Login" type="text" placeholder="Digite seu CPF ou CNPJ" {...register("cpfCnpj")} />
-          {errors.cpfCnpj && <p style={{ color: 'red' }}>{errors.cpfCnpj.message}</p>}
+          <Input
+            label="Login"
+            type="text"
+            placeholder="Digite seu CPF ou CNPJ"
+            {...register('cpfCnpj')}
+          />
+          {errors.cpfCnpj && (
+            <ErrorMessage>{errors.cpfCnpj.message}</ErrorMessage>
+          )}
 
-          <Input label="Senha" type="password" placeholder="Digite sua senha" {...register("password")} />
-          {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
+          <Input
+            label="Senha"
+            type="password"
+            placeholder="Digite sua senha"
+            {...register('password')}
+          />
+          {errors.password && (
+            <ErrorMessage>{errors.password.message}</ErrorMessage>
+          )}
 
-          <Button type="submit">Entrar</Button>
+          {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
+
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Entrando...' : 'Entrar'}
+          </Button>
         </form>
         <p>
-  Ainda não é membro? <LinkButton onClick={() => setModalIsOpen(true)}>Abra sua conta!</LinkButton>
-</p>
+          Ainda não é membro?{' '}
+          <LinkButton onClick={() => setModalIsOpen(true)}>
+            Abra sua conta!
+          </LinkButton>
+        </p>
 
-        {modalIsOpen && <OpenAccountModal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)} />}
+        {modalIsOpen && (
+          <OpenAccountModal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+          />
+        )}
       </LeftSide>
       <RightSide />
     </Container>
