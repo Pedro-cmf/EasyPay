@@ -1,62 +1,143 @@
-import React, { useState, useEffect } from 'react';
-import api from '../../../api/api ';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { useTransactions } from '../../hooks/useTransactions';
 import Navbar from '../../components/navbar/navBar';
 import Footer from '../../components/footer/footer';
-import { Container, Section, TabelaTransacoes, DetalhesConta } from './transferenciaStyles';
+import {
+  Container,
+  Section,
+  TabelaTransacoes,
+  DetalhesConta,
+} from './transferenciaStyles';
 
 function Transferencia() {
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({ chave: '', valor: '' });
-  const [usuario, setUsuario] = useState(null);
+  const navigate = useNavigate();
+  const { user, logout, refreshUser } = useAuth();
+  const { createTransaction, findUserByPixKey } = useTransactions();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const resUsuario = await api.get('/users/1');
-      setUsuario(resUsuario.data);
-    };
-    fetchData();
-  }, []);
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    chave: '',
+    valor: '',
+    name: '',
+  });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNext = async () => {
-    const res = await api.get('/users');
-    const userExists = res.data.find(user => user.key === formData.chave);
-    if (userExists) {
-      setFormData({ ...formData, name: userExists.name });
-      setStep(step + 1);
-    } else alert('⚠️ Chave inválida.');
+    if (!formData.chave.trim()) {
+      setError('Digite uma chave PIX válida');
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const recipient = await findUserByPixKey(formData.chave);
+      setFormData((prev) => ({ ...prev, name: recipient.name }));
+      setStep(2);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmit = async () => {
-    await api.post('/transactions', formData);
-    window.location.href = '/transacoes';
+    const valor = parseFloat(formData.valor);
+
+    if (!valor || valor <= 0) {
+      setError('Digite um valor válido');
+      return;
+    }
+
+    if (valor > (user?.balance || 0)) {
+      setError('Saldo insuficiente');
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      await createTransaction({
+        chave: formData.chave,
+        value: valor,
+        name: formData.name,
+      });
+      await refreshUser();
+      navigate('/transacoes');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBack = () => {
+    setStep(1);
+    setError('');
   };
 
   return (
     <Container>
-      <Navbar handleLogout={() => (window.location.href = '/')} />
+      <Navbar user={user} handleLogout={logout} />
       <Section>
         <TabelaTransacoes>
           <h3>Nova Transferência</h3>
+
+          {error && <p style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
+
           {step === 1 && (
             <>
-              <input placeholder="Chave" onChange={(e) => setFormData({ ...formData, chave: e.target.value })} />
-              <button onClick={handleNext}>Próximo</button>
+              <input
+                placeholder="Chave PIX do destinatário"
+                value={formData.chave}
+                onChange={(e) =>
+                  setFormData({ ...formData, chave: e.target.value })
+                }
+                disabled={isLoading}
+              />
+              <button onClick={handleNext} disabled={isLoading}>
+                {isLoading ? 'Buscando...' : 'Próximo'}
+              </button>
             </>
           )}
+
           {step === 2 && (
             <>
               <p>Para: {formData.name}</p>
-              <input placeholder="Valor" onChange={(e) => setFormData({ ...formData, valor: e.target.value })} />
-              <button onClick={handleSubmit}>Confirmar</button>
+              <p>Chave: {formData.chave}</p>
+              <input
+                placeholder="Valor (R$)"
+                type="number"
+                min="0.01"
+                step="0.01"
+                value={formData.valor}
+                onChange={(e) =>
+                  setFormData({ ...formData, valor: e.target.value })
+                }
+                disabled={isLoading}
+              />
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button onClick={handleBack} disabled={isLoading}>
+                  Voltar
+                </button>
+                <button onClick={handleSubmit} disabled={isLoading}>
+                  {isLoading ? 'Processando...' : 'Confirmar'}
+                </button>
+              </div>
             </>
           )}
         </TabelaTransacoes>
 
         <DetalhesConta>
           <h4>Conta</h4>
-          <p>Nome: {usuario?.name}</p>
-          <p>Saldo: R$ {usuario?.balance}</p>
-          <p>Chave: {usuario?.key}</p>
+          <p>Nome: {user?.name}</p>
+          <p>Saldo: R$ {user?.balance?.toFixed(2)}</p>
+          <p>Chave: {user?.key}</p>
         </DetalhesConta>
       </Section>
       <Footer />

@@ -62,3 +62,10 @@ export const LinkButton = styled.button`
     text-decoration: none;
   }
 `;
+
+export const ErrorMessage = styled.p`
+  color: ${({ theme }) => theme.colors.error};
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+`;
